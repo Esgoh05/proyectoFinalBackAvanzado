@@ -31,7 +31,8 @@ const productSchema = mongoose.Schema({
         type: String,
         required: [true, 'Por favor, ingresa el SKU del producto'],
         unique: true
-    }
+    },
+    deleted: { type: Boolean, default: false } // Campo para el borrado lógico
 }, {
     timestamps: true //crea campos createdAt y updatedAt
 })

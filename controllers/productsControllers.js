@@ -79,13 +79,13 @@ const updateProductos = asyncHandler( async(request, response) => {
     if (user && user.esAdmin) {
         const productoUpdated = await Product.findByIdAndUpdate(request.params.id, request.body, {new: true})
 
-        response.status(200).json(productoUpdated)
-        /*if(productoUpdated){
+        //response.status(200).json(productoUpdated)
+        if(productoUpdated){
             response.status(200).json(productoUpdated)
         } else{
             response.status(400)
             throw new Error('No se ha podido mostrar la informacion')
-        }*/
+        }
     }else{
         console.log('El usuario no es un administrador');
         response.status(400)
@@ -94,8 +94,37 @@ const updateProductos = asyncHandler( async(request, response) => {
 
 })
 
+
+const deleteProducto = asyncHandler(async (request, response) => {
+    const productId = request.params.id;
+
+    // Buscar el producto por ID
+    const product = await Product.findById(productId);
+
+    if (!product) {
+        response.status(404);
+        throw new Error('Ese producto no existe');
+    }
+
+    // Verificar si el usuario es un administrador
+    const user = request.user; // Suponiendo que request.user contiene la información del usuario actual
+    if (user && user.esAdmin) {
+        // Actualizar el producto para marcarlo como eliminado
+        const updatedProduct = await Product.findByIdAndUpdate(productId, { deleted: true }, { new: true });
+        if (!updatedProduct) {
+            throw new Error('Producto no encontrado');
+        }
+        response.status(200).json({ message: 'Producto eliminado correctamente' });
+    } else {
+        console.log('El usuario no es un administrador');
+        response.status(403);
+        throw new Error('El usuario no es un administrador');
+    }
+});
+
 module.exports = {
     getProducts,
     crearProduct,
-    updateProductos
+    updateProductos,
+    deleteProducto
 }
