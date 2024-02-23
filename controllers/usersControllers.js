@@ -5,10 +5,10 @@ const User = require('../models/usersModel')
 
 const crearUser = asyncHandler(async(request, response) => {
 
-    const  {name, email, password, esAdmin} = request.body
+    const  {name, email, password, phone, esAdmin} = request.body
 
     //verificamos que nos pasen todos los datos necesarios para crear un usuario
-    if(!name || !email || !password){
+    if(!name || !email || !password || !phone){
         response.status(400)
         throw new Error('Faltan datos')
     }
@@ -29,6 +29,7 @@ const crearUser = asyncHandler(async(request, response) => {
         name,
         email,
         password: hashedPassword,
+        phone,
         esAdmin
     })
 
@@ -38,6 +39,7 @@ const crearUser = asyncHandler(async(request, response) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            phone: user.phone,
             esAdmin: user.esAdmin
         })
         
