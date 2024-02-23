@@ -16,7 +16,8 @@ const productSchema = mongoose.Schema({
     },
     price: {
         type: String,
-        required: [true, "Por favor teclea el precio del producto"]
+        required: [true, "Por favor teclea el precio del producto"],
+        min: 0 // Garantiza que el precio sea mayor o igual a 0
     },
     category: {
         type: String,
